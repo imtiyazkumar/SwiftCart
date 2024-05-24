@@ -1,6 +1,8 @@
-import { NextFunction, RequestHandler, Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { ErrorCode, HttException } from "./src/exceptions/root"
 import { InternalException } from "./src/exceptions/internalException"
+import { ZodError } from "zod";
+import { BadRequestException } from "./src/exceptions/badRequest";
 
 export const errorHandler = (method: Function) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -12,11 +14,13 @@ export const errorHandler = (method: Function) => {
             if (error instanceof HttException) {
                 exception = error;
             } else {
-                exception = new InternalException(
-                    'Internal Server Error',
-                    error,
-                    ErrorCode.INTERNAL_EXCEPTION
-                );
+
+                if (error instanceof ZodError) {
+                    exception = new BadRequestException("Unprocessable entity.", ErrorCode.UNPROCESSABLE_ENTITY, error.errors.map(e => e.message))
+                }
+                else {
+                    exception = new InternalException('Internal Server Error', error, ErrorCode.INTERNAL_EXCEPTION);
+                }
             }
 
             console.error(exception.message, exception.stack);
@@ -24,36 +28,3 @@ export const errorHandler = (method: Function) => {
         }
     };
 };
-
-
-
-
-// export const errorHandler = (method: RequestHandler): RequestHandler => {
-//     return async (req, res, next): Promise<void> => {
-//         try {
-//             method(req, res, next);
-//         } catch (error) {
-//             let exception: HttException;
-
-//             if (error instanceof HttException) {
-//                 exception = error;
-//             } else {
-//                 exception = new InternalException(
-//                     'Internal Server Error',
-//                     error,
-//                     ErrorCode.INTERNAL_EXCEPTION
-//                 );
-//             }
-
-//             console.error(exception.message, exception.stack);
-
-//             next(exception);
-//         }
-//     };
-// };
-
-// const test: RequestHandler = () => {
-//     console.log("test")
-// }
-
-// return test;

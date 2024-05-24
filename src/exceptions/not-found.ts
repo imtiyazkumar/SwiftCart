@@ -1,7 +1,7 @@
 import { ErrorCode, HttException } from "./root";
 
-export class BadRequestException extends HttException {
+export class NotFoundException extends HttException {
     constructor(message: string, errorCode: ErrorCode) {
-        super(message, errorCode, 400, null);
+        super(message, errorCode, 404, null);
     }
 }

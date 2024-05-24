@@ -18,4 +18,4 @@ export const prismaClient = new PrismaClient({
     log: ["query"]
 })
 
-app.listen(PORT, () => console.log("Running on http://localhost:8090/"));
+app.listen(PORT, () => console.log("Server running at http://localhost:8090/"));
