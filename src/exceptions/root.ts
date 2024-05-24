@@ -1,8 +1,8 @@
 export class HttException extends Error {
     message: string;
-    errCode: ErrorCode;
+    errCode: any;
     statusCode: number;
-    errors: any;
+    errors: ErrorCode
 
     constructor(message: string, errCode: ErrorCode, statusCode: number, errors: any) {
         super(message)
