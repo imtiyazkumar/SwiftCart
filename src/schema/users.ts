@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const SignUpSchema = z.object({
     name: z.string({ required_error: "Name is required" }).trim().min(3, { message: "Name must be at least 3 chars." }).max(255, { message: "Name must not be more than 255 characters" }),
