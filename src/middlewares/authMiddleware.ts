@@ -4,6 +4,15 @@ import { UnAuthorizedException } from "../exceptions/unAuthorizedException";
 import { ErrorCode } from "../exceptions/root";
 import { JWT_SECRET } from "../secrets";
 import { prismaClient } from "..";
+import { User } from "@prisma/client";
+
+declare global {
+    namespace Express {
+        export interface Request {
+            user: User;
+        }
+    }
+}
 
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,7 +32,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
             return next(new UnAuthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
         }
 
-        // req.user = user;
+        req.user = user;
         next();
     } catch (error) {
         return next(new UnAuthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
