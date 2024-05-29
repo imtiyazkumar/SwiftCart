@@ -13,16 +13,16 @@ export const signUp = async (req: Request, res: Response) => {
     SignUpSchema.parse(req.body);
 
     const { email, password, name } = req.body;
-    let user = await prismaClient.user.findFirst({
-        where: { email }
-    });
+    let user = await prismaClient.user.findFirst({ where: { email } });
 
     if (user) {
         throw new BadRequestException("User already exists", ErrorCode.USER_ALREADY_EXISTS, error);
     }
 
     user = await prismaClient.user.create({ data: { name, email, password: hashSync(password, 10), updated_at: new Date() } });
-    res.send(user);
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET)
+
+    res.send({ user, token })
 };
 
 export const signIn = async (req: Request, res: Response) => {
