@@ -50,25 +50,26 @@ model Category {
 }
 
 model Product {
-  id                     Int     @id @default(autoincrement())
-  uuid                   String  @default(uuid())
+  id                     Int      @id @default(autoincrement())
+  uuid                   String   @default(uuid())
   name                   String
   description            String?
-  min_stock_quantity     Int     @default(0)
-  max_stock_quantity     Int     @default(0)
-  current_stock_quantity Int     @default(0)
+  min_stock_quantity     Int      @default(0)
+  max_stock_quantity     Int      @default(0)
+  current_stock_quantity Int      @default(0)
   category_id            Int
   user_id                Int
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
 
-  category   Category    @relation(fields: [category_id], references: [id])
-  user       User        @relation(fields: [user_id], references: [id])
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  Price      Price[]
-  Discount   Discount[]
-  OrderItem  OrderItem[]
-  Rating     Rating[]
-  CartItem   CartItem[]
+  category Category @relation(fields: [category_id], references: [id])
+  user     User     @relation(fields: [user_id], references: [id])
+
+  Price     Price[]
+  Discount  Discount[]
+  OrderItem OrderItem[]
+  Rating    Rating[]
+  CartItem  CartItem[]
 
   @@map("products")
 }
@@ -113,7 +114,8 @@ model Order {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  user      User        @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
   OrderItem OrderItem[]
 
   @@map("orders")
