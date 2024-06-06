@@ -20,7 +20,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@prisma/client": "^5.13.0",
+    "@prisma/client": "^5.14.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "eslint": "^9.3.0",
